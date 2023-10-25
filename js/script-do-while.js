@@ -9,7 +9,7 @@ let i = 0;
 
 
 
-// codice con do
+// codice con do...while
 
 do {
     currentItem = ShoppingList[i];
@@ -21,13 +21,3 @@ do {
 console.log(ListString);
 document.querySelector("ul").innerHTML = ListString;
 
-//codice con while: 
-
-// while( i < ShoppingList.length) {
-//     currentItem = ShoppingList[i];
-//     console.log(currentItem);
-//     ListString += `<li>${currentItem}</li>`;
-//     i++;
-// }
-// console.log(ListString);
-// document.querySelector("ul").innerHTML = ListString;
