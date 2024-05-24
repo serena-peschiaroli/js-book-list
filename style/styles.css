@@ -1,0 +1,153 @@
+/* reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F4E1D2;
+}
+
+img {
+    width: 100%;
+}
+
+/* container */
+.container {
+    width: 90%;
+    margin: 0 auto;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #F9F5EF;
+    
+}
+
+header {
+    min-height: 200px;
+    background-color: #D4A373;
+    
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-bottom: 2px solid #B87333;
+   
+}
+
+/* HEADER: LOGO */
+.logo img {
+    height: 70px;
+    width: 70px;
+    border-radius: 100%;
+}
+
+/* HEADER searchbar */
+.search-bar {
+    width: 40%;
+}
+
+.search-bar input {
+    padding: 1rem;
+    border-radius: 20px;
+    width: 100%;
+    border: 2px solid #B87333;
+    
+    background-color: #FFF8E7;
+
+}
+
+/* HEADER navigation */
+.nav ul {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.nav ul li a {
+    text-decoration: none;
+    color: #8B0000;
+    /* Red */
+    font-weight: bold;
+}
+
+/* input container */
+.input-container {
+    padding: 1rem;
+    width: 100%;
+    border: 1px solid #B87333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #FFF8E7;
+    margin: 20px 0;
+}
+
+.input-container form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+
+
+
+.input-container input,
+.input-container select,
+.input-container button {
+    padding: 0.5rem;
+    border: 2px solid #B87333;
+
+    border-radius: 10px;
+}
+
+.input-container button {
+    background-color: #D4A373;
+    color: white;
+    cursor: pointer;
+}
+
+/* book-container */
+.book-container {
+    width: 100%;
+    border: 1px solid #B87333;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    background-color: #FFF8E7;
+    padding: 20px;
+    justify-content: center;
+    background-color: #FFF8E7;
+
+    padding: 20px;
+}
+
+.book {
+    width: calc(100% / 4);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+}
+
+
+
+/* footer */
+footer {
+    min-height: 100px;
+    background-color: #D4A373;
+    width: 100%;
+    border-top: 2px solid #B87333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
