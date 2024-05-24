@@ -4,10 +4,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const resultsDiv = document.getElementById('results');
   const shoppingListUl = document.getElementById('book-list');
   const paginationContainer = document.getElementById('pagination');
+  const imgUrl = 'https://covers.openlibrary.org/b/lccn/';
 
       // variables for pagination setup
     let currentPage = 1;
-    const itemsPerPage = 6;
+    const itemsPerPage = 3;
+       let books = []; // Initialize books array
 
   // Load book list from local storage
   let shoppingList = Store.getShoppingList();
@@ -23,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function searchBooks(query) {
     console.log(query);
-    fetch(`https://openlibrary.org/search.json?q=${query}`)
+    fetch(`https://openlibrary.org/search.json?q=${query}&limit=20`)
       .then(response => response.json())
       .then(data => {
         console.log(data.docs);
@@ -42,16 +44,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const paginatedItems = books.slice(start, end);
     if(paginatedItems.length > 0){
         paginatedItems.forEach(book => {
-        const bookDiv = document.createElement('div');
-        bookDiv.classList.add('book');
-        bookDiv.innerHTML = `
+        const col = document.createElement('div');
+        col.className = 'book';
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML =`
           <h3>${book.title}</h3>
-          <p>Author: ${book.author_name ? book.author_name.join(', ') : 'Unknown'}</p>
+          <img src="${imgUrl}${book.lccn[0]}-M.jpg"
+          <p>Author: ${book.author_name ? book.author_name[0] : 'Unknown'}</p>
           <p>First Published: ${book.first_publish_year || 'Unknown'}</p>
           <button data-title="${book.title}" data-author="${book.author_name ? book.author_name.join(', ') : 'Unknown'}">Add to Shopping List</button>
         `;
-        bookDiv.querySelector('button').addEventListener('click', addToShoppingList);
-        resultsDiv.appendChild(bookDiv);
+        card.querySelector('button').addEventListener('click', addToShoppingList);
+        col.appendChild(card);
+        resultsDiv.appendChild(col);
         });
     }else{
         resultsDiv.innerHTML = '<p>No result found</p>'; 

@@ -8,6 +8,7 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #F4E1D2;
+    height: 100vh;
 }
 
 img {
@@ -21,14 +22,13 @@ img {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     background-color: #F9F5EF;
     
 }
 
 header {
-    min-height: 200px;
+    
     background-color: #D4A373;
     
     width: 100%;
@@ -120,23 +120,62 @@ header {
     width: 100%;
     border: 1px solid #B87333;
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
     background-color: #FFF8E7;
     padding: 20px;
     justify-content: center;
     background-color: #FFF8E7;
+    height: 100%;
 
     padding: 20px;
 }
 
+.row {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: center;
+    height: 100%;
+    gap: 1rem ;
+}
+
 .book {
-    width: calc(100% / 4);
+    width: calc(80% / 3);
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    border-radius: 10px;
+    border: 1px solid black;
+    max-height: 400px;
+}
+
+.card{
+    border: 1px solid gray;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+   
+}
+
+.card img {
+    height: 200px;
+    width: 150px;
+    aspect-ratio: 1;
+}
+
+.card button {
+    padding: 0.5rem;
+    border: 2px solid #B87333;
+    
+    border-radius: 10px;
 
 }
+
+
 
 
 
