@@ -42,31 +42,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const end = start + itemsPerPage;
 
     const paginatedItems = books.slice(start, end);
-    if(paginatedItems.length > 0){
+    if (paginatedItems.length > 0) {
         paginatedItems.forEach(book => {
-        const col = document.createElement('div');
-        col.className = 'book';
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML =`
-          <h3>${book.title}</h3>
-          <img src="${imgUrl}${book.lccn[0]}-M.jpg"
-          <p>Author: ${book.author_name ? book.author_name[0] : 'Unknown'}</p>
-          <p>First Published: ${book.first_publish_year || 'Unknown'}</p>
-          <button data-title="${book.title}" data-author="${book.author_name ? book.author_name.join(', ') : 'Unknown'}">Add to Shopping List</button>
-        `;
-        card.querySelector('button').addEventListener('click', addToShoppingList);
-        col.appendChild(card);
-        resultsDiv.appendChild(col);
+            const col = document.createElement('div');
+            col.className = 'book';
+            const card = document.createElement('div');
+            card.className = 'card';
+            const imgSrc = book.lccn ? `${imgUrl}${book.lccn[0]}-M.jpg` : 'default-image.jpg';
+            card.innerHTML = `
+                <div class="card-title"><h3>${book.title}</h3></div>
+                <div class="card-image"><img src="${imgSrc}" alt="Book Image"></div>
+                <div class="card-body">
+                    <p>Author: ${book.author_name ? book.author_name[0] : 'Unknown'}</p>
+                    <p>First Published: ${book.first_publish_year || 'Unknown'}</p>
+                </div>
+                <div class="card-footer">
+                    <button class="add-item" data-title="${book.title}" data-author="${book.author_name ? book.author_name[0] : 'Unknown'}">Add to Shopping List</button>
+                </div>
+            `;
+            col.appendChild(card);
+            resultsDiv.appendChild(col);
+
+            // Add event listener to the button after it has been appended to the DOM
+            const addButton = card.querySelector('.add-item');
+            if (addButton) {
+                addButton.addEventListener('click', addToShoppingList);
+            } else {
+                console.error('Button not found for book:', book);
+            }
         });
-    }else{
-        resultsDiv.innerHTML = '<p>No result found</p>'; 
-        //display pagination controls
-     
-
+    } else {
+        resultsDiv.innerHTML = '<p>No results found</p>';
     }
-
-  }
+}
 
   function displayPaginationControls(totalItems) {
         //container pagination control

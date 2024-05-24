@@ -127,9 +127,6 @@ header {
     padding: 20px;
     justify-content: center;
     background-color: #FFF8E7;
-    height: 100%;
-
-    padding: 20px;
 }
 
 .row {
@@ -143,28 +140,33 @@ header {
     gap: 1rem ;
 }
 
-.book {
-    width: calc(80% / 3);
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    border-radius: 10px;
-    border: 1px solid black;
-    max-height: 400px;
+.book{
+    padding: 1rem;
+    width: 30%;
+
 }
 
 .card{
     border: 1px solid gray;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        padding: 1rem;
+        justify-content: center;
+        width: 100%;
+        align-items: center;
+        gap: 1rem;
+    
+
    
 }
+
 
 .card img {
     height: 200px;
     width: 150px;
     aspect-ratio: 1;
+
 }
 
 .card button {
