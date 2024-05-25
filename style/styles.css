@@ -142,6 +142,7 @@ header {
 
 /* book-container */
 .book-container {
+    /* height: 900px; */
     width: 100%;
     border: 1px solid #B87333;
     display: flex;
