@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // DOM Elements
     const searchButton = document.getElementById('search-button');
     const searchInput = document.getElementById('search-input');
     const resultsDiv = document.getElementById('results');
@@ -9,26 +10,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingSpinner = document.getElementById('loading-spinner');
     const toggleListButton = document.getElementById('toggle-list-button');
     const listContainer = document.getElementById('list-container');
-    const imgUrl = 'https://covers.openlibrary.org/b/lccn/';
-    const baseUrl = 'https://openlibrary.org/search.json?q=';
     const feedbackDiv = document.createElement('div');
     const bookContainer = document.getElementById('book-container');
     const filterReadSelect = document.getElementById('filter-read');
     const applyFilterButton = document.getElementById('apply-filter-button');
 
-    document.body.appendChild(feedbackDiv);
+    // API URL and Image URL
+    const imgUrl = 'https://covers.openlibrary.org/b/lccn/';
+    const baseUrl = 'https://openlibrary.org/search.json?q=';
 
+    // Initial Setup
+    document.body.appendChild(feedbackDiv);
     let currentPage = 1;
     const itemsPerPage = 6;
     let books = [];
     let shoppingList = Store.getShoppingList();
     renderShoppingList();
 
+    // Get the count of items in the shopping list
     function getItemCount() {
         let quantity = shoppingList.length;
         return quantity > 99 ? '99+' : quantity;
     }
 
+    // Update the displayed item count
     function updateItemCount() {
         const itemCount = getItemCount();
         const itemCountSpan = document.getElementById('item-count');
@@ -37,12 +42,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateItemCount();
 
+    // Toggle visibility of the list container
     toggleListButton.addEventListener('click', () => {
         listContainer.classList.toggle('active');
         resultsDiv.classList.toggle('active');
         bookContainer.classList.toggle('active');
     });
 
+    // Search button event listener
     searchButton.addEventListener('click', (e) => {
         e.preventDefault();
         const query = searchInput.value.trim();
@@ -52,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Pagination buttons event listeners
     prevButton.addEventListener('click', () => {
         if (currentPage > 1) {
             currentPage--;
@@ -68,24 +76,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Apply filter button event listener
     applyFilterButton.addEventListener('click', () => {
         renderShoppingList();
     });
 
+    // Start a new search by showing the spinner and clearing results
     function startNewSearch() {
         showLoadingSpinner();
         resultsDiv.innerHTML = '';
     }
 
+    // Show loading spinner
     function showLoadingSpinner() {
         loadingSpinner.classList.remove('hidden');
         noResultsPlaceholder.classList.add('hidden');
     }
 
+    // Hide loading spinner
     function hideLoadingSpinner() {
         loadingSpinner.classList.add('hidden');
     }
 
+    // Fetch books from the API
     function searchBooks(query) {
         fetch(`${baseUrl}${query}`)
             .then(response => response.json())
@@ -99,6 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .finally(() => hideLoadingSpinner());
     }
 
+    // Display search results
     function displayResults(books) {
         noResultsPlaceholder.classList.add('hidden');
         resultsDiv.innerHTML = '';
@@ -134,11 +148,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Update navigation buttons state
     function updateNavigationButtons() {
         prevButton.disabled = currentPage === 1;
         nextButton.disabled = currentPage === Math.ceil(books.length / itemsPerPage);
     }
 
+    // Add a book to the shopping list
     function addToShoppingList(event) {
         const button = event.target;
         const title = button.getAttribute('data-title');
@@ -157,10 +173,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Check if a book is already in the shopping list
     function isBookInList(book) {
         return shoppingList.some(item => item.lccn === book.lccn);
     }
 
+    // Render the shopping list
     function renderShoppingList() {
         const filter = filterReadSelect.value;
         shoppingListUl.innerHTML = '';
@@ -203,6 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Show feedback message
     function showFeedback(message, type) {
         feedbackDiv.textContent = message;
         feedbackDiv.className = `feedback ${type}`;
@@ -213,6 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// Store object for managing shopping list in localStorage
 const Store = {
     getShoppingList: function () {
         return JSON.parse(localStorage.getItem('shoppingList')) || [];
@@ -237,6 +257,7 @@ const Store = {
     }
 };
 
+// Book class to represent a book object
 class Book {
     constructor(title, author, lccn = '', isRead = false) {
         this.title = title;

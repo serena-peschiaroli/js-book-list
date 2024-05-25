@@ -30,6 +30,7 @@ img {
     align-items: center;
 }
 
+/* Header */
 .header {
     display: flex;
     justify-content: center;
@@ -87,6 +88,7 @@ img {
     right: -10px;
 }
 
+/* Row */
 .row {
     width: 100%;
     display: flex;
@@ -114,24 +116,19 @@ img {
     justify-content: center;
 }
 
+/* Spinner */
 .spinner {
-
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     height: 100%;
-
-
 }
-
 
 .spinner img {
     width: 300px;
-  
     height: 300px;
     border-radius: 50%;
- 
     animation: spin 2s linear infinite;
 }
 
@@ -145,6 +142,7 @@ img {
     }
 }
 
+/* Placeholder */
 .placeholder {
     text-align: center;
     color: #888;
@@ -153,11 +151,11 @@ img {
     width: 50%;
 }
 
-.hidden{
+.hidden {
     display: none;
 }
 
-
+/* Book */
 .book {
     padding: 1rem;
     width: calc(80% / 3);
@@ -170,6 +168,7 @@ img {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
+/* Card */
 .card {
     border: 1px solid #555;
     border-radius: 10px;
@@ -186,19 +185,6 @@ img {
     transition: transform 0.3s ease;
 }
 
-/* .card-details {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    box-sizing: border-box;
-    padding: 1rem;
-    overflow-y: scroll;
-} */
-
 .card:hover {
     transform: scale(1.05);
 }
@@ -209,22 +195,17 @@ img {
 
 .card-title h3 {
     font-size: 1.2rem;
-    
     font-weight: bold;
-   
 }
 
 .card-body {
     margin-bottom: 5px;
     line-height: 1.2;
     text-align: center;
-
-
 }
 
 .card-body p {
     font-size: 1rem;
-   
 }
 
 .card img {
@@ -252,6 +233,7 @@ img {
     background-color: #666;
 }
 
+/* Navigation Buttons */
 .navigation-buttons {
     display: flex;
     justify-content: center;
@@ -274,7 +256,6 @@ img {
 .prev:hover,
 .next:hover {
     background-color: #666;
-    
 }
 
 /* List Container */
@@ -295,6 +276,7 @@ img {
     flex-direction: column;
 }
 
+/* Filters */
 .filters {
     margin-bottom: 20px;
     display: flex;
@@ -328,6 +310,7 @@ img {
     background-color: #555;
 }
 
+/* Book List Card */
 .book-list-card {
     border: 1px solid gray;
     border-radius: 10px;
@@ -343,9 +326,8 @@ img {
     transition: transform 0.3s ease;
 }
 
-.book-list-card:hover{
+.book-list-card:hover {
     transform: scale(1.05);
-
 }
 
 .book-list-card img {
@@ -367,6 +349,7 @@ img {
     background-color: #555;
 }
 
+/* Feedback */
 .feedback {
     position: fixed;
     bottom: 20px;
