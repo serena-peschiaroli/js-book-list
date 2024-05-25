@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const baseUrl = 'https://openlibrary.org/search.json?' ;
     const key = document.getElementById('key');
     const feedbackDiv = document.createElement('div');
+    const bookContainer = document.getElementById('book-container');
+    
 
     document.body.appendChild(feedbackDiv);
 
@@ -36,6 +38,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     toggleListButton.addEventListener('click', () => {
         listContainer.classList.toggle('active');
+        resultsDiv.classList.toggle('active');
+        bookContainer.classList.toggle('active');
+        
     });
 
     searchButton.addEventListener('click', (e) => {
@@ -112,11 +117,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     console.error('Button not found for book:', book);
                 }
+
+                const buttonContent = `   <div class="prev"></div>
+                <div class="next"></div>`;
+                const prevButtonHtml = '<div class="prev"></div>';
+                const nextButtonHtml = '<div class="next"></div>';
+                 showButtons();
+              
             });
         } else {
             resultsDiv.innerHTML = '<p>No results found</p>';
         }
     }
+
+    function showButtons() {
+    
+    const prevButton = document.querySelector('.prev');
+    const nextButton = document.querySelector('.next');
 
     function updateNavigationButtons() {
         prevButton.disabled = currentPage === 1;

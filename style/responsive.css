@@ -1,0 +1,65 @@
+@media screen and (max-width: 768px) {
+
+    header .logo {
+        display: none;
+    }
+
+    header {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-end;
+        padding: 1rem;
+    }
+
+    .wrapper{
+        min-height: 500px;
+    }
+
+    .book-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow-y: auto;
+        height: 100%;
+
+    }
+
+    .book-container.active{
+        display: none;
+    }
+
+    .book {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .sub-row.active {
+     display: none;
+     /* Hide sub-row when list-container is active */
+ }
+
+    .list-container.active{
+        width: 100%;
+    }
+
+    .list-container h2{
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .book-list{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        
+    }
+
+
+
+
+}
