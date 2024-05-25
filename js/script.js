@@ -5,21 +5,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const shoppingListUl = document.getElementById('book-list');
     const prevButton = document.getElementById('prev-button');
     const nextButton = document.getElementById('next-button');
+    const noResultsPlaceholder = document.getElementById('no-results-placeholder');
+    const loadingSpinner = document.getElementById('loading-spinner');
     const toggleListButton = document.getElementById('toggle-list-button');
     const listContainer = document.getElementById('list-container');
     const imgUrl = 'https://covers.openlibrary.org/b/lccn/';
-    const baseUrl = 'https://openlibrary.org/search.json?' ;
-    const key = document.getElementById('key');
+    const baseUrl = 'https://openlibrary.org/search.json?q=';
     const feedbackDiv = document.createElement('div');
     const bookContainer = document.getElementById('book-container');
-    
+    const filterReadSelect = document.getElementById('filter-read');
+    const applyFilterButton = document.getElementById('apply-filter-button');
 
     document.body.appendChild(feedbackDiv);
 
     let currentPage = 1;
     const itemsPerPage = 6;
     let books = [];
-
     let shoppingList = Store.getShoppingList();
     renderShoppingList();
 
@@ -40,15 +41,14 @@ document.addEventListener('DOMContentLoaded', () => {
         listContainer.classList.toggle('active');
         resultsDiv.classList.toggle('active');
         bookContainer.classList.toggle('active');
-        
     });
 
     searchButton.addEventListener('click', (e) => {
         e.preventDefault();
         const query = searchInput.value.trim();
-        const keyValue = key.value;
         if (query) {
-            searchBooks(query, keyValue);
+            startNewSearch();
+            searchBooks(query);
         }
     });
 
@@ -68,26 +68,44 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    function searchBooks(query, keyValue) {
-        fetch(`${baseUrl}${keyValue}${query}`)
+    applyFilterButton.addEventListener('click', () => {
+        renderShoppingList();
+    });
+
+    function startNewSearch() {
+        showLoadingSpinner();
+        resultsDiv.innerHTML = '';
+    }
+
+    function showLoadingSpinner() {
+        loadingSpinner.classList.remove('hidden');
+        noResultsPlaceholder.classList.add('hidden');
+    }
+
+    function hideLoadingSpinner() {
+        loadingSpinner.classList.add('hidden');
+    }
+
+    function searchBooks(query) {
+        fetch(`${baseUrl}${query}`)
             .then(response => response.json())
             .then(data => {
                 books = data.docs;
                 currentPage = 1;
                 displayResults(books);
                 updateNavigationButtons();
-                console.log(keyValue, query);
             })
-            
-            .catch(error => console.error('Error:', error));
+            .catch(error => console.error('Error:', error))
+            .finally(() => hideLoadingSpinner());
     }
 
     function displayResults(books) {
+        noResultsPlaceholder.classList.add('hidden');
         resultsDiv.innerHTML = '';
         const start = (currentPage - 1) * itemsPerPage;
         const end = start + itemsPerPage;
-
         const paginatedItems = books.slice(start, end);
+
         if (paginatedItems.length > 0) {
             paginatedItems.forEach(book => {
                 const col = document.createElement('div');
@@ -96,44 +114,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 card.className = 'card';
                 const imgSrc = book.lccn ? `${imgUrl}${book.lccn[0]}-M.jpg` : 'img/default-image.png';
                 card.innerHTML = `
-                  <div class="card-details">
                     <div class="card-title"><h3 class="card-title">${book.title}</h3></div>
                     <div class="card-image"><img src="${imgSrc}" alt="Book Image"></div>
                     <div class="card-body">
                         <p><strong>Author:</strong> ${book.author_name ? book.author_name[0] : 'Unknown'}</p>
-                        <p><strong>First Published:</strong> ${book.first_publish_year || 'Unknown'}</p>
                     </div>
                     <div class="card-footer">
                         <button class="add-item" data-title="${book.title}" data-author="${book.author_name ? book.author_name[0] : 'Unknown'}" data-lccn="${book.lccn ? book.lccn[0] : ''}">Add to List</button>
                     </div>
-                  </div>
                 `;
                 col.appendChild(card);
                 resultsDiv.appendChild(col);
 
                 const addButton = card.querySelector('.add-item');
-                if (addButton) {
-                    addButton.addEventListener('click', addToShoppingList);
-                } else {
-                    console.error('Button not found for book:', book);
-                }
-
-                const buttonContent = `   <div class="prev"></div>
-                <div class="next"></div>`;
-                const prevButtonHtml = '<div class="prev"></div>';
-                const nextButtonHtml = '<div class="next"></div>';
-                 showButtons();
-              
+                addButton.addEventListener('click', addToShoppingList);
             });
         } else {
             resultsDiv.innerHTML = '<p>No results found</p>';
         }
     }
-
-    function showButtons() {
-    
-    const prevButton = document.querySelector('.prev');
-    const nextButton = document.querySelector('.next');
 
     function updateNavigationButtons() {
         prevButton.disabled = currentPage === 1;
@@ -147,7 +146,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const lccn = button.getAttribute('data-lccn');
         const book = new Book(title, author, lccn);
 
-        // Check if the book is already in the list
         if (!isBookInList(book)) {
             Store.addBook(book);
             shoppingList = Store.getShoppingList();
@@ -164,54 +162,56 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderShoppingList() {
+        const filter = filterReadSelect.value;
         shoppingListUl.innerHTML = '';
+
         shoppingList.forEach((book, index) => {
-            const card = document.createElement('div');
-            card.className = 'book-list-card';
+            if (filter === 'all' || (filter === 'read' && book.isRead) || (filter === 'unread' && !book.isRead)) {
+                const card = document.createElement('div');
+                card.className = 'book-list-card';
+                const imgSrc = book.lccn ? `${imgUrl}${book.lccn}-M.jpg` : 'img/default-image.png';
 
-            const imgSrc = book.lccn ? `${imgUrl}${book.lccn}-M.jpg` : 'img/default-image.png';
+                card.innerHTML = `
+                    <div class="card-title"><h3>${book.title}</h3></div>
+                    <div class="card-image"><img src="${imgSrc}" alt="Book Image"></div>
+                    <div class="card-body">
+                        <p><strong>Author:</strong> ${book.author}</p>
+                    </div>
+                    <div class="card-footer">
+                        <button class="remove-item">Remove</button>
+                        <button class="read-item">${book.isRead ? 'Unread' : 'Read'}</button>
+                    </div>
+                `;
 
-            card.innerHTML = `
-                <div class="card-title"><h3>${book.title}</h3></div>
-                <div class="card-image"><img src="${imgSrc}" alt="Book Image"></div>
-                <div class="card-body">
-                    <p><strong>Author:</strong> ${book.author}</p>
-                </div>
-                <div class="card-footer">
-                    <button class="remove-item">Remove</button>
-                    <button class="read-item">${book.isRead ? 'Unread' : 'Read'}</button>
-                </div>
-            `;
+                const removeButton = card.querySelector('.remove-item');
+                removeButton.addEventListener('click', () => {
+                    Store.removeBook(index);
+                    shoppingList = Store.getShoppingList();
+                    renderShoppingList();
+                    updateItemCount();
+                });
 
-            const removeButton = card.querySelector('.remove-item');
-            removeButton.addEventListener('click', () => {
-                Store.removeBook(index);
-                shoppingList = Store.getShoppingList();
-                renderShoppingList();
-                updateItemCount();
-            });
+                const readButton = card.querySelector('.read-item');
+                readButton.addEventListener('click', () => {
+                    Store.toggleReadStatus(index);
+                    shoppingList = Store.getShoppingList();
+                    renderShoppingList();
+                });
 
-            const readButton = card.querySelector('.read-item');
-            readButton.addEventListener('click', () => {
-                Store.toggleReadStatus(index);
-                shoppingList = Store.getShoppingList();
-                renderShoppingList();
-            });
-
-            shoppingListUl.appendChild(card);
+                shoppingListUl.appendChild(card);
+            }
         });
     }
 
-  function showFeedback(message, type) {
-          feedbackDiv.textContent = message;
-          feedbackDiv.className = `feedback ${type}`;
-          feedbackDiv.style.display = 'block';
-          setTimeout(() => {
-              feedbackDiv.style.display = 'none';
-          }, 3000);
-  }
+    function showFeedback(message, type) {
+        feedbackDiv.textContent = message;
+        feedbackDiv.className = `feedback ${type}`;
+        feedbackDiv.style.display = 'block';
+        setTimeout(() => {
+            feedbackDiv.style.display = 'none';
+        }, 3000);
+    }
 });
-
 
 const Store = {
     getShoppingList: function () {
@@ -236,7 +236,6 @@ const Store = {
         localStorage.setItem('shoppingList', JSON.stringify(shoppingList));
     }
 };
-
 
 class Book {
     constructor(title, author, lccn = '', isRead = false) {

@@ -11,37 +11,30 @@
 
 <body>
     <div class="container">
-
-    
-
-         <header>
-                <div class="logo">
-                    <img src="img/bookshop-logo.webp" alt="Bookshop Logo">
-                </div>
-                <div class="input-container">
-                    <form>
-                        <input type="search" name="search" id="search-input" placeholder="Search...">
-                        <select name="search" id="key">
-                            <option value="q=">Free Search</option>
-                            <option value="title=">Title</option>
-                            <option value="author=">Author</option>
-                        </select>
-                        <button type="submit" id="search-button">Submit</button>
-                    </form>
-                </div>
-                <div class="nav">
-                    <ul>
-                        <li>
-                            <button class="btn" id="toggle-list-button">Your list</button>
-                            <span id="item-count" class="item-count">0</span>
-                        </li>
-                    </ul>
-                </div>
-            </header>
+        <div class="header">
+            <input type="text" id="search-input" placeholder="Search...">
+            <button id="search-button">Search</button>
+            <div class="nav">
+                <button class="btn" id="toggle-list-button">Your List </button>
+                <span id="item-count" class="item-count">0</span>
+            </div>
+        </div>
         <div class="wrapper">
-            <div class="row">         
+            <div class="row">     
                 <div class="book-container" id="book-container">
+                    <div class="loading hidden" id="loading-spinner">
+                        <div class="spinner">
+                            <p style="margin-bottom: 1rem;">Loading, please wait...</p>
+                            <img src="img/spinner-dark.webp" alt="Loading...">
+                    
+                        </div>
+                    </div>
+                    <div class="placeholder" id="no-results-placeholder">
+                        <p>Welcome to the BookList app! Feel free to search for the title you are interested in and save it to your list. In
+                            your list, you can mark the ones you have read or not.</p>
+                    </div>
                     <div class="sub-row" id="results">
+                        
                     
                     </div>
                     <div class="navigation-buttons">
@@ -53,6 +46,15 @@
     
                 <div class="list-container" id="list-container">
                     <h2>Book List</h2>
+                    <div class="filters">
+                        <label for="filter-read">Show:</label>
+                        <select id="filter-read">
+                            <option value="all">All</option>
+                            <option value="read">Read</option>
+                            <option value="unread">Unread</option>
+                        </select>
+                        <button id="apply-filter-button" class="btn">Apply Filter</button>
+                    </div>
                     <ul id="book-list"></ul>
 
                 </div>
