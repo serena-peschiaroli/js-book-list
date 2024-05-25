@@ -20,7 +20,7 @@
                 <div class="input-container">
                     <form>
                         <input type="search" name="search" id="search-input" placeholder="Search...">
-                        <select name="by" id="by">
+                        <select name="search" id="key">
                             <option value="q=">Free Search</option>
                             <option value="title=">Title</option>
                             <option value="author=">Author</option>
@@ -41,51 +41,17 @@
             <div class="row">         
                 <div class="book-container">
                     <div class="sub-row" id="results">
-                        <!-- <div class="col">
-                            <div class="card">
-                                <h3> card title
-                                </h3>
-                                <img src="https://covers.openlibrary.org/b/lccn/-M.jpg" alt="">
-                                <p>card body</p>
-                                <p>card body</p>
-                                <button>Click here</button>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card">
-                                <h3> card title
-                                </h3>
-                                <img src="https://covers.openlibrary.org/b/lccn/-M.jpg" alt="">
-                                <p>card body</p>
-                                <p>card body</p>
-                                <button>Click here</button>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card">
-                                <h3> card title
-                                </h3>
-                                <img src="https://covers.openlibrary.org/b/lccn/-M.jpg" alt="">
-                                <p>card body</p>
-                                <p>card body</p>
-                                <button>Click here</button>
-                            </div>
-
-                            
-                        </div> -->
-                        
-
+                    
                     </div>
                     <div class="navigation-buttons">
-                        <button id="prev-button" class="prev"></button>
-                        <button id="next-button" class="next"></button>
+                        <button id="prev-button" class="prev"> prev</button>
+                        <button id="next-button" class="next"> next</button>
                     </div>
                    
                 </div>
     
                 <div class="list-container" id="list-container">
                     <h2>Book List</h2>
-                    <button class="close-btn" id="close-list">X</button>
                     <ul id="book-list"></ul>
 
                 </div>

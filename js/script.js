@@ -6,9 +6,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const prevButton = document.getElementById('prev-button');
     const nextButton = document.getElementById('next-button');
     const toggleListButton = document.getElementById('toggle-list-button');
-    const closeListBtn = document.getElementById("close-list");
     const listContainer = document.getElementById('list-container');
     const imgUrl = 'https://covers.openlibrary.org/b/lccn/';
+    const baseUrl = 'https://openlibrary.org/search.json?' ;
+    const key = document.getElementById('key');
+    const feedbackDiv = document.createElement('div');
+
+    document.body.appendChild(feedbackDiv);
 
     let currentPage = 1;
     const itemsPerPage = 6;
@@ -34,15 +38,12 @@ document.addEventListener('DOMContentLoaded', () => {
         listContainer.classList.toggle('active');
     });
 
-    closeListBtn.addEventListener("click", () =>{
-      listContainer.classList.remove('active');
-    } );
-
     searchButton.addEventListener('click', (e) => {
         e.preventDefault();
         const query = searchInput.value.trim();
+        const keyValue = key.value;
         if (query) {
-            searchBooks(query);
+            searchBooks(query, keyValue);
         }
     });
 
@@ -62,15 +63,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    function searchBooks(query) {
-        fetch(`https://openlibrary.org/search.json?q=${query}&limit=100`)
+    function searchBooks(query, keyValue) {
+        fetch(`${baseUrl}${keyValue}${query}`)
             .then(response => response.json())
             .then(data => {
                 books = data.docs;
                 currentPage = 1;
                 displayResults(books);
                 updateNavigationButtons();
+                console.log(keyValue, query);
             })
+            
             .catch(error => console.error('Error:', error));
     }
 
@@ -88,7 +91,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 card.className = 'card';
                 const imgSrc = book.lccn ? `${imgUrl}${book.lccn[0]}-M.jpg` : 'img/default-image.png';
                 card.innerHTML = `
-                    <div class="card-title"><h3>${book.title}</h3></div>
+                  <div class="card-details">
+                    <div class="card-title"><h3 class="card-title">${book.title}</h3></div>
                     <div class="card-image"><img src="${imgSrc}" alt="Book Image"></div>
                     <div class="card-body">
                         <p><strong>Author:</strong> ${book.author_name ? book.author_name[0] : 'Unknown'}</p>
@@ -97,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="card-footer">
                         <button class="add-item" data-title="${book.title}" data-author="${book.author_name ? book.author_name[0] : 'Unknown'}" data-lccn="${book.lccn ? book.lccn[0] : ''}">Add to List</button>
                     </div>
+                  </div>
                 `;
                 col.appendChild(card);
                 resultsDiv.appendChild(col);
@@ -124,10 +129,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const author = button.getAttribute('data-author');
         const lccn = button.getAttribute('data-lccn');
         const book = new Book(title, author, lccn);
-        Store.addBook(book);
-        shoppingList = Store.getShoppingList();
-        renderShoppingList();
-        updateItemCount();
+
+        // Check if the book is already in the list
+        if (!isBookInList(book)) {
+            Store.addBook(book);
+            shoppingList = Store.getShoppingList();
+            renderShoppingList();
+            updateItemCount();
+            showFeedback('Book added to your list!', 'success');
+        } else {
+            showFeedback('Book is already in your list!', 'error');
+        }
+    }
+
+    function isBookInList(book) {
+        return shoppingList.some(item => item.lccn === book.lccn);
     }
 
     function renderShoppingList() {
@@ -168,6 +184,15 @@ document.addEventListener('DOMContentLoaded', () => {
             shoppingListUl.appendChild(card);
         });
     }
+
+  function showFeedback(message, type) {
+          feedbackDiv.textContent = message;
+          feedbackDiv.className = `feedback ${type}`;
+          feedbackDiv.style.display = 'block';
+          setTimeout(() => {
+              feedbackDiv.style.display = 'none';
+          }, 3000);
+  }
 });
 
 
